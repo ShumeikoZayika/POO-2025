@@ -1,0 +1,18 @@
+{
+    "configurations": [
+        {
+            "type": "java",
+            "name": "ArgsEcho",
+            "request": "launch",
+            "mainClass": "escnaval.exemplo.ArgsEcho",
+            "projectName": "lab01_975f1d4d"
+        },
+        {
+            "type": "java",
+            "name": "HelloWorld",
+            "request": "launch",
+            "mainClass": "escnaval.exemplo.HelloWorld",
+            "projectName": "lab01_975f1d4d"
+        }
+    ]
+}
