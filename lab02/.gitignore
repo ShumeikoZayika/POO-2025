@@ -1,0 +1,6 @@
+# Ignora arquivos de build e IDE
+/out/
+*.class
+*.log
+/.DS_Store
+/.idea/
