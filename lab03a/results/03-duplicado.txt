@@ -1,0 +1,21 @@
+
+=== Menu Registos ===
+1) Adicionar registo
+2) Listar registos
+3) Remover por ID
+0) Sair
+ID? Nome? [OK] Adicionado.
+
+=== Menu Registos ===
+1) Adicionar registo
+2) Listar registos
+3) Remover por ID
+0) Sair
+ID? Nome? [X] Falhou (ID repetido ou nome vazio).
+
+=== Menu Registos ===
+1) Adicionar registo
+2) Listar registos
+3) Remover por ID
+0) Sair
+Adeus!

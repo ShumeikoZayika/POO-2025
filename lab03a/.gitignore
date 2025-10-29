@@ -1,0 +1,4 @@
+# Ignore build artifacts
+out/
+*.class
+.DS_Store

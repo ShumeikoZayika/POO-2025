@@ -1,0 +1,43 @@
+
+=== Menu Registos ===
+1) Adicionar registo
+2) Listar registos
+3) Remover por ID
+0) Sair
+ID? Nome? [OK] Adicionado.
+
+=== Menu Registos ===
+1) Adicionar registo
+2) Listar registos
+3) Remover por ID
+0) Sair
+ID? Nome? [OK] Adicionado.
+
+=== Menu Registos ===
+1) Adicionar registo
+2) Listar registos
+3) Remover por ID
+0) Sair
+1	Ana
+2	Bob
+
+=== Menu Registos ===
+1) Adicionar registo
+2) Listar registos
+3) Remover por ID
+0) Sair
+ID a remover? [OK] Removido.
+
+=== Menu Registos ===
+1) Adicionar registo
+2) Listar registos
+3) Remover por ID
+0) Sair
+2	Bob
+
+=== Menu Registos ===
+1) Adicionar registo
+2) Listar registos
+3) Remover por ID
+0) Sair
+Adeus!

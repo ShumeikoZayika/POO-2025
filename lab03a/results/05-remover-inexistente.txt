@@ -1,0 +1,14 @@
+
+=== Menu Registos ===
+1) Adicionar registo
+2) Listar registos
+3) Remover por ID
+0) Sair
+ID a remover? [X] ID inexistente.
+
+=== Menu Registos ===
+1) Adicionar registo
+2) Listar registos
+3) Remover por ID
+0) Sair
+Adeus!
