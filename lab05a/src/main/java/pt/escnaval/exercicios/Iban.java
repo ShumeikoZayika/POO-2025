@@ -2,30 +2,36 @@ package pt.escnaval.exercicios;
 
 import java.util.Locale;
 import java.util.Objects;
+import java.util.regex.Pattern;
 
+/**
+ * IBAN simplificado (valor imutavel).
+ */
 public final class Iban {
-    private final String valor;
+    private static final Pattern IBAN_PT = Pattern.compile("^PT[0-9A-Z]{23}$");
 
-    private Iban(String valor) {
-        this.valor = valor;
-    }
+    private final String codigo;
 
-    public static Iban of(String valorBruto) {
-        Objects.requireNonNull(valorBruto, "valorBruto");
-        String normalizado = valorBruto.replaceAll("\\s+", "").toUpperCase(Locale.ROOT);
-        if (!normalizado.matches("[A-Z]{2}\\d{2}[A-Z0-9]{1,30}")) {
-            throw new IllegalArgumentException("IBAN invalido: " + valorBruto);
+    public Iban(String codigoBruto) {
+        if (codigoBruto == null) {
+            this.codigo = null;
+        } else {
+            String normalizado = codigoBruto.trim().toUpperCase(Locale.ROOT);
+            this.codigo = IBAN_PT.matcher(normalizado).matches() ? normalizado : null;
         }
-        return new Iban(normalizado);
     }
 
-    public String getValor() {
-        return valor;
+    public boolean isValid() {
+        return codigo != null;
+    }
+
+    public String codigo() {
+        return codigo;
     }
 
     @Override
     public String toString() {
-        return valor;
+        return isValid() ? codigo : "INVALID";
     }
 
     @Override
@@ -33,15 +39,15 @@ public final class Iban {
         if (this == obj) {
             return true;
         }
-        if (obj == null || getClass() != obj.getClass()) {
+        if (!(obj instanceof Iban)) {
             return false;
         }
         Iban other = (Iban) obj;
-        return valor.equals(other.valor);
+        return Objects.equals(codigo, other.codigo);
     }
 
     @Override
     public int hashCode() {
-        return valor.hashCode();
+        return Objects.hashCode(codigo);
     }
 }

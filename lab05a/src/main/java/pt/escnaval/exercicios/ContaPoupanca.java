@@ -1,30 +1,42 @@
 package pt.escnaval.exercicios;
 
+import java.util.Locale;
+
 public class ContaPoupanca extends Conta {
     private final double taxaJuroAnual;
 
-    public ContaPoupanca(Cliente titular, Iban iban, double taxaJuroAnual) {
-        super(titular, iban);
-        if (taxaJuroAnual < 0) {
-            throw new IllegalArgumentException("taxa invalida");
-        }
-        this.taxaJuroAnual = taxaJuroAnual;
+    public ContaPoupanca(Iban iban, Cliente titular, double saldoInicial, double taxaJuroAnual) {
+        super(iban, titular, saldoInicial);
+        this.taxaJuroAnual = taxaJuroAnual >= 0 ? taxaJuroAnual : 0;
     }
 
     public double getTaxaJuroAnual() {
         return taxaJuroAnual;
     }
 
-    public void capitalizar(int meses) {
-        if (meses <= 0) {
-            throw new IllegalArgumentException("meses tem de ser positivo");
+    public double calcularJuros() {
+        if (!isValida()) {
+            return 0;
         }
-        double taxaMensal = taxaJuroAnual / 12.0;
-        double saldoAtual = getSaldo();
-        double novoSaldo = saldoAtual * Math.pow(1 + taxaMensal, meses);
-        double juros = novoSaldo - saldoAtual;
-        if (juros > 0) {
-            depositar(juros);
+        return saldo * (taxaJuroAnual / 100.0);
+    }
+
+    public boolean aplicarJuros() {
+        double juros = calcularJuros();
+        if (juros <= 0) {
+            return false;
         }
+        saldo += juros;
+        return true;
+    }
+
+    @Override
+    public String toString() {
+        if (!isValida()) {
+            return "[ContaPoupanca invalida]";
+        }
+        return String.format(Locale.US,
+                "ContaPoupanca %s\t%-18s saldo=%.2f (taxa: %.2f%%)",
+                getIban(), getTitular().getNome(), saldo, taxaJuroAnual);
     }
 }

@@ -1,14 +1,13 @@
 package pt.escnaval.exercicios;
 
+import java.util.Locale;
+
 public class ContaOrdem extends Conta {
     private final double limiteDescoberto;
 
-    public ContaOrdem(Cliente titular, Iban iban, double limiteDescoberto) {
-        super(titular, iban);
-        if (limiteDescoberto < 0) {
-            throw new IllegalArgumentException("Limite tem de ser >= 0");
-        }
-        this.limiteDescoberto = limiteDescoberto;
+    public ContaOrdem(Iban iban, Cliente titular, double saldoInicial, double limiteDescoberto) {
+        super(iban, titular, saldoInicial);
+        this.limiteDescoberto = limiteDescoberto >= 0 ? limiteDescoberto : 0;
     }
 
     public double getLimiteDescoberto() {
@@ -16,7 +15,24 @@ public class ContaOrdem extends Conta {
     }
 
     @Override
-    protected boolean podeLevantar(double valor) {
-        return getSaldo() - valor >= -limiteDescoberto;
+    public boolean levantar(double valor) {
+        if (!isValida() || valor <= 0) {
+            return false;
+        }
+        if (saldo - valor < -limiteDescoberto) {
+            return false;
+        }
+        saldo -= valor;
+        return true;
+    }
+
+    @Override
+    public String toString() {
+        if (!isValida()) {
+            return "[ContaOrdem invalida]";
+        }
+        return String.format(Locale.US,
+                "ContaOrdem %s\t%-18s saldo=%.2f (limite: %.2f)",
+                getIban(), getTitular().getNome(), saldo, limiteDescoberto);
     }
 }

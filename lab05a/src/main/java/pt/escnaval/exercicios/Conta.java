@@ -1,63 +1,98 @@
 package pt.escnaval.exercicios;
 
+import java.util.Locale;
 import java.util.Objects;
 
-public abstract class Conta {
-    private final Cliente titular;
+/**
+ * Conta bancaria com identidade por IBAN.
+ */
+public class Conta {
     private final Iban iban;
-    private double saldo;
+    private final Cliente titular;
+    protected double saldo;
+    private final boolean valida;
 
-    protected Conta(Cliente titular, Iban iban) {
-        this.titular = Objects.requireNonNull(titular, "titular");
-        this.iban = Objects.requireNonNull(iban, "iban");
+    public Conta(Iban iban, Cliente titular, double saldoInicial) {
+        this.iban = iban;
+        this.titular = titular;
+        if (iban == null || !iban.isValid() || titular == null || !titular.isValido() || saldoInicial < 0) {
+            this.saldo = 0;
+            this.valida = false;
+        } else {
+            this.saldo = saldoInicial;
+            this.valida = true;
+        }
     }
 
-    public Cliente getTitular() {
-        return titular;
+    public boolean isValida() {
+        return valida;
     }
 
     public Iban getIban() {
         return iban;
     }
 
+    public Cliente getTitular() {
+        return titular;
+    }
+
     public double getSaldo() {
         return saldo;
     }
 
-    public void depositar(double valor) {
-        validarValor(valor);
+    public boolean depositar(double valor) {
+        if (!valida || valor <= 0) {
+            return false;
+        }
         saldo += valor;
+        return true;
     }
 
-    public void levantar(double valor) {
-        validarValor(valor);
-        if (!podeLevantar(valor)) {
-            throw new IllegalStateException("Saldo insuficiente para " + valor);
+    public boolean levantar(double valor) {
+        if (!valida || valor <= 0 || valor > saldo) {
+            return false;
         }
         saldo -= valor;
+        return true;
     }
 
-    public void transferir(double valor, Conta destino) {
-        Objects.requireNonNull(destino, "destino");
-        if (this == destino) {
-            throw new IllegalArgumentException("Conta de destino nao pode ser a mesma");
+    public boolean transferirPara(Conta destino, double valor) {
+        if (!valida || destino == null || !destino.isValida() || destino == this) {
+            return false;
         }
-        this.levantar(valor);
-        destino.depositar(valor);
-    }
-
-    protected boolean podeLevantar(double valor) {
-        return saldo >= valor;
-    }
-
-    private static void validarValor(double valor) {
-        if (valor <= 0) {
-            throw new IllegalArgumentException("Valor tem de ser positivo");
+        if (!this.levantar(valor)) {
+            return false;
         }
+        if (!destino.depositar(valor)) {
+            saldo += valor; // reverter operacao
+            return false;
+        }
+        return true;
     }
 
     @Override
     public String toString() {
-        return titular + " - " + iban + " => saldo: " + String.format("%.2f", saldo);
+        if (!valida) {
+            return "[Conta invalida]";
+        }
+        return String.format(Locale.US, "%s\t%-18s saldo=%.2f",
+                iban, titular.getNome(), saldo);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (!(o instanceof Conta)) {
+            return false;
+        }
+        Conta other = (Conta) o;
+        return Objects.equals(iban, other.iban);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hashCode(iban);
     }
 }

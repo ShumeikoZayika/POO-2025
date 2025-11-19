@@ -2,25 +2,39 @@ package pt.escnaval.exercicios;
 
 import java.util.Objects;
 
-public class Endereco {
+/**
+ * Objeto de valor imutavel que representa um endereco.
+ */
+public final class Endereco {
     private final String rua;
-    private final String numero;
     private final String cidade;
     private final String codigoPostal;
+    private final boolean valido;
 
-    public Endereco(String rua, String numero, String cidade, String codigoPostal) {
-        this.rua = Objects.requireNonNull(rua, "rua");
-        this.numero = Objects.requireNonNull(numero, "numero");
-        this.cidade = Objects.requireNonNull(cidade, "cidade");
-        this.codigoPostal = Objects.requireNonNull(codigoPostal, "codigoPostal");
+    public Endereco(String rua, String cidade, String codigoPostal) {
+        if (isBlank(rua) || isBlank(cidade) || isBlank(codigoPostal)) {
+            this.rua = "";
+            this.cidade = "";
+            this.codigoPostal = "";
+            this.valido = false;
+        } else {
+            this.rua = rua.trim();
+            this.cidade = cidade.trim();
+            this.codigoPostal = codigoPostal.trim();
+            this.valido = true;
+        }
+    }
+
+    private static boolean isBlank(String valor) {
+        return valor == null || valor.trim().isEmpty();
+    }
+
+    public boolean isValido() {
+        return valido;
     }
 
     public String getRua() {
         return rua;
-    }
-
-    public String getNumero() {
-        return numero;
     }
 
     public String getCidade() {
@@ -33,6 +47,29 @@ public class Endereco {
 
     @Override
     public String toString() {
-        return rua + ", " + numero + " - " + codigoPostal + " " + cidade;
+        if (!valido) {
+            return "[Endereco invalido]";
+        }
+        return String.format("%s, %s (%s)", rua, cidade, codigoPostal);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (!(o instanceof Endereco)) {
+            return false;
+        }
+        Endereco other = (Endereco) o;
+        return valido == other.valido
+                && Objects.equals(rua, other.rua)
+                && Objects.equals(cidade, other.cidade)
+                && Objects.equals(codigoPostal, other.codigoPostal);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(rua, cidade, codigoPostal, valido);
     }
 }
