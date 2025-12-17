@@ -1,0 +1,13 @@
+# Ignore build artifacts
+target/
+bin/
+out/
+
+# IDE metadata
+.idea/
+.vscode/
+*.iml
+
+# Local data
+data/*.csv
+media/
