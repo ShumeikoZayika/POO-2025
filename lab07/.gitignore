@@ -2,12 +2,14 @@
 target/
 bin/
 out/
+*.class
 
 # IDE metadata
 .idea/
 .vscode/
 *.iml
 
-# Local data
-data/*.csv
+# Dados locais (opcional)
 media/
+!media/.gitkeep
+data/
